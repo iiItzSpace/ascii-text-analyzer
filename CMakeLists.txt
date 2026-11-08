@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 4.2)
-project(loop_template_C C)
+project(ascii-text-analyzer C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(loop_template_C main.c)
+add_executable(ascii_text_analyzer main.c)
