@@ -54,9 +54,11 @@ static constexpr size_t INPUT_BUFFER_SIZE = 64;
 }
 
 int main() {
-    printf("=======================\n");
-    printf("     Program title     \n");
-    printf("=======================\n");
+    printf("=============================\n");
+    printf("     ASCII TEXT ANALYZER     \n");
+    printf("=============================\n");
+    printf("\nREMEMBER: Only standard ASCII characters (0-127) are supported.\n");
+    printf("Extended characters, non ASCII symbols, or accents will be ignored\n");
 
     do {
         printf("\nInput: ");
