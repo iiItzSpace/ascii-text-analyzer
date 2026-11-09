@@ -1,5 +1,7 @@
-#include <stdio.h>
+#include "ascii_stats.h"
+
 #include <ctype.h>
+#include <stdio.h>
 #include <string.h>
 
 static constexpr size_t INPUT_BUFFER_SIZE = 64;
