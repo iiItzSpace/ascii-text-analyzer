@@ -85,7 +85,6 @@ int main() {
 
         free(text);
 
-
     } while (ask_continue());
 
     printf("\nClosing program...\n");
