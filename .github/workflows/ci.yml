@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-tests:
+    name: Build & Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup CMake 4.2
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.2.x'
+
+      - name: Configure CMake (strict C23)
+        run: >
+          cmake -B build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_STANDARD=23
+          -DCMAKE_C_STANDARD_REQUIRED=ON
+          -DCMAKE_C_EXTENSIONS=OFF
+          -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic -Werror"
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
+
+  sanitizers:
+    name: ASan + UBSan (ubuntu-latest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup CMake 4.2
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.2.x'
+
+      - name: Configure with Sanitizers
+        run: >
+          cmake -B build-san
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_STANDARD=23
+          -DCMAKE_C_STANDARD_REQUIRED=ON
+          -DCMAKE_C_EXTENSIONS=OFF
+          -DCMAKE_C_FLAGS="-Wall -Wextra -Wpedantic -Werror -fsanitize=address,undefined -fno-omit-frame-pointer"
+
+      - name: Build
+        run: cmake --build build-san
+
+      - name: Run tests with Sanitizers
+        run: ctest --test-dir build-san --output-on-failure
