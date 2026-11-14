@@ -61,7 +61,8 @@ int main() {
     printf("Extended characters, non ASCII symbols, or accents will be ignored\n");
 
     do {
-        printf("\nInput: ");
+        printf("\nTo indicate the end of the entered text, press CTRL + D\n");
+        printf("\nEnter text to analyze: ");
         printf("\n");
         // Input logic
 
