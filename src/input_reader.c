@@ -5,8 +5,10 @@
 
 static constexpr size_t INITIAL_CAPACITY = 64;
 
-char *read_stream(FILE *stream) {
-    if (stream == nullptr) {
+char *read_stream(FILE *stream)
+{
+    if (stream == nullptr)
+    {
         return nullptr;
     }
 
@@ -14,21 +16,27 @@ char *read_stream(FILE *stream) {
     size_t length = 0;
     char *buffer = malloc(capacity);
 
-    if (buffer == nullptr) {
+    if (buffer == nullptr)
+    {
         return nullptr;
     }
 
     int ch;
-    while ((ch = fgetc(stream)) != EOF) {
-        if (length + 1 >= capacity) {
-            if (capacity > SIZE_MAX / 2) {
+    while ((ch = fgetc(stream)) != EOF)
+    {
+        if (length + 1 >= capacity)
+        {
+            // Prevent size_t overflow before doubling buffer capacity.
+            if (capacity > SIZE_MAX / 2)
+            {
                 free(buffer);
                 return nullptr;
             }
 
             size_t new_capacity = capacity * 2;
             char *temp = realloc(buffer, new_capacity);
-            if (temp == nullptr) {
+            if (temp == nullptr)
+            {
                 free(buffer);
                 return nullptr;
             }
@@ -40,7 +48,9 @@ char *read_stream(FILE *stream) {
         buffer[length++] = (char)ch;
     }
 
-    if (ferror(stream)) {
+    // Distinguish a real I/O read failure from normal EOF.
+    if (ferror(stream))
+    {
         free(buffer);
         return nullptr;
     }
