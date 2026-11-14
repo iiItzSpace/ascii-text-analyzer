@@ -5,6 +5,7 @@ set(CMAKE_C_STANDARD 23)
 
 add_executable(ascii_text_analyzer
         src/main.c
+        src/input_reader.c
         include/ascii_stats.h
 )
 

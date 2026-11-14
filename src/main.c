@@ -1,8 +1,16 @@
 #include "ascii_stats.h"
 
+#include <input_reader.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifdef _WIN32
+static constexpr char EOF_SHORTCUT[] = "CTRL + Z then Enter";
+#else
+static constexpr char EOF_SHORTCUT[] = "Enter then CTRL + D";
+#endif
 
 static constexpr size_t INPUT_BUFFER_SIZE = 64;
 
@@ -61,10 +69,22 @@ int main() {
     printf("Extended characters, non ASCII symbols, or accents will be ignored\n");
 
     do {
-        printf("\nTo indicate the end of the entered text, press CTRL + D\n");
-        printf("\nEnter text to analyze: ");
+        printf("\nTo indicate the end of the entered text, press %s\n", EOF_SHORTCUT);
+        printf("Enter text to analyze:\n");
+        printf("> ");
+
+        char *text = read_stream(stdin);
+        clearerr(stdin);
+
+        if (text == nullptr) {
+            fprintf(stderr, "\n [Error] Failed to read input or allocate memory\n");
+            return 1;
+        }
+
         printf("\n");
-        // Input logic
+
+        free(text);
+
 
     } while (ask_continue());
 
